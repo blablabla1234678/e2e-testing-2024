@@ -96,3 +96,8 @@ test('can read and delete posts', async ({request}) => {
 });
 ```
 
+## Selenium
+
+Selenium node does not seem to support API testing, so I skipped it after a few hours of googling.
+In theory I could add support by a simple form which gathers request data, sends it with fetch API and returns the response.
+In practice I rather play with other more complete solutions and keep Selenium for webpage testing.
