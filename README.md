@@ -101,3 +101,33 @@ test('can read and delete posts', async ({request}) => {
 Selenium node does not seem to support API testing, so I skipped it after a few hours of googling.
 In theory I could add support by a simple form which gathers request data, sends it with fetch API and returns the response.
 In practice I rather play with other more complete solutions and keep Selenium for webpage testing.
+
+## Nightwatch
+
+Nightwatch does not support import - from syntax and does not support partial JSON comparison as Playwright does.
+We can compare JSON partially in a loop if we want to, but in the current test it would not make sense.
+It supports `response._body` without another await for JSON parsing which is a plus.
+Having separate methods for setting the request body and headers is another plus, because it makes understanding the code somewhat easier.
+We have the same amount of code lines as with Playwright, so it is a real competitor. Personally I cannot decide I like both. 
+
+```js
+it('can read and delete posts', async ({supertest}) => {
+	const user = await getUserWithToken(supertest, 'user1');
+	const post = await getPost(supertest, 'post1b');
+
+	let response = await supertest.request(api)
+		.get(`posts/${post.id}`);
+	expect(response.statusCode).to.eq(200);
+	expect(response._body.title).to.eq(postsFixture.post1b.title);
+	expect(response._body.body).to.eq(postsFixture.post1b.body);
+
+	response = await supertest.request(api)
+		.delete(`posts/${post.id}`)
+		.set('authorization', 'Bearer '+user.token.plainText);
+	expect(response.statusCode).to.eq(200);
+
+	response = await supertest.request(api)
+		.get(`posts/${post.id}`);
+	expect(response.statusCode).to.eq(404);
+});
+```
