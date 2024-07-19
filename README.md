@@ -1,10 +1,10 @@
 # e2e testing framework comparison in 2024
 The aim of the project to compare the available free end to end testing frameworks in 2024.
 Currently Cypress, Playwright, Selenium and Nightwatch are planned, but I might add more later.
-We use a Laravel example CRUD API to test against.
+We use a [Laravel example CRUD API](https://github.com/blablabla1234678/proba) to test against.
 
 ## Laravel
-Laravel has PhpUnit based feature tests, we can use as baseline.
+Laravel has [PhpUnit based feature tests](https://github.com/blablabla1234678/proba/blob/main/tests/Feature/PostTest.php#L87C1-L97C6), we can use as baseline.
 Laravel supports only a single request per test, so we have to use the database directly to add fixtures and check the results.
 As of the e2e frameworks the tests depend on each other, even the test fiiles depend on each other, which is not the best practice.
 I use helper functions to get the id of certain users, their token and the id of certain posts to reuse some code.
@@ -27,7 +27,7 @@ public function test_deleting_post():void {
 
 I think the main problem with Cypress that we have to fight against callback hell. With aliases we can try to workaround it, but still it is not the best experience.
 Another issue that I did not find matchers for JSON comparison for the scenario where the first JSON contains more properties than the second and we need to ignore those properties.
-These two problems make the test files extremely long though I still managed to write something readable.
+These two problems make the test files extremely long though I still managed to [write something readable](https://github.com/blablabla1234678/proba-cypress/blob/main/cypress/e2e/posts.spec.cy.js#L52).
 
 ```js
 it('can read and delete posts', () => {
@@ -70,7 +70,7 @@ it('can read and delete posts', () => {
 ```
 
 ## Playwright
-Playwright is like the fresh air after Cypress. It supports async/await extensively. My only problem that I always have to call `await response.json()` instead of just getting `response.body`.
+Playwright [is like the fresh air](https://github.com/blablabla1234678/proba-playwright/blob/main/tests/02-posts.spec.js#L46) after Cypress. It supports async/await extensively. My only problem that I always have to call `await response.json()` instead of just getting `response.body`.
 Another little issue that the `body` is called `data` in the requests, which is a weird naming if you ask me, but it is acceptable.
 It supports partial JSON comparison as well, so I can solve it with a one-liner instead of two or more lines.
 
